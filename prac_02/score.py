@@ -2,9 +2,12 @@
 CP1404/CP5632 - Practical
 Program to determine score status
 """
-MENU = """ E - Evaluate a score
+
+import random
+
+MENU = """E - Evaluate a score
 R - Generate a random score
-Q -Quit """
+Q - Quit """
 
 MIN_SCORE = 0
 MAX_SCORE = 100
@@ -19,7 +22,8 @@ def main():
             score = float(input("Enter Score: "))
             print(get_result(score))
         elif choice == "R":
-            score = get_random_number
+            score = get_random_score()
+            print(f"Random score: {score}")
             print(get_result(score))
         else:
             print("invalid value")
@@ -37,6 +41,7 @@ def get_result(score):
     else:
         return "Bad"
 
-#TODO: Create Random score function
+def get_random_score():
+    return random.randint(MIN_SCORE, MAX_SCORE)
 
 main()
