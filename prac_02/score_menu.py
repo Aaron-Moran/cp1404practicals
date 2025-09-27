@@ -28,3 +28,13 @@ def main():
         print(MENU)
         choice = input(">>> ").upper()
     print("farewell")
+
+def get_result(score):
+    if score < MIN_SCORE or score > MAX_SCORE:
+        return "Invalid score"
+    elif score >= EXCELLENT_SCORE:
+        return "Excellent"
+    elif score >= PASSABLE_SCORE:
+        return "Passable"
+    else:
+        return "Bad"
