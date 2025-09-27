@@ -25,10 +25,14 @@ def main():
         choice = input(">>> ").upper()
     print("Thank you.")
 
+# function to convert Fahrenheit to Celsius
 def get_celsius(celsius: float, fahrenheit: float) -> float:
     celsius = 5 / 9 * (fahrenheit - 32)
     return celsius
 
+#function to convert Celsius to Fahrenheit
 def get_fahrenheit(celsius: float) -> float:
     fahrenheit = celsius * 9.0 / 5 + 32
     return fahrenheit
+
+main()

@@ -14,10 +14,12 @@ def main():
     score = float(input("Enter score: "))
     print(get_result(score))
 
+    # Generates a random score value
     random_score = random.randint(MIN_SCORE, MAX_SCORE)
     print(f"Random score: {random_score}")
     print(get_result(random_score))
 
+# Function for checking validity and grade of the score
 def get_result(score):
     if score < MIN_SCORE or score > MAX_SCORE:
         return "Invalid score"
