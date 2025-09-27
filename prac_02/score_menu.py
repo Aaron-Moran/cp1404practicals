@@ -13,28 +13,43 @@ MAX_SCORE = 100
 PASSABLE_SCORE = 50
 EXCELLENT_SCORE = 90
 
+# Main loop to receive users input
 def main():
+    score = get_valid_score(MIN_SCORE, MAX_SCORE)
     print(MENU)
     choice = input(">>> ").upper()
     while choice != "Q":
         if choice == "G":
-            score = float(input("Enter score: "))
+            score = get_valid_score(MIN_SCORE, MAX_SCORE)
         elif choice == "P":
             print(get_result(score))
         elif choice == "S":
-            # TODO: STARS
+            show_stars(score)
         else:
             print("Invalid option!")
         print(MENU)
         choice = input(">>> ").upper()
-    print("farewell")
+    print("Farewell!")
 
+# Applies a grade to the score
 def get_result(score):
-    if score < MIN_SCORE or score > MAX_SCORE:
-        return "Invalid score"
-    elif score >= EXCELLENT_SCORE:
+    if score >= EXCELLENT_SCORE:
         return "Excellent"
     elif score >= PASSABLE_SCORE:
         return "Passable"
     else:
         return "Bad"
+
+# Gets a score from the user within the range of 0 - 100
+def get_valid_score(min_score, max_score):
+    score = float(input("Enter score: "))
+    while score < min_score or score > max_score:
+        print(f"invalid score. Input value between {min_score} and {max_score}.")
+        score = float(input("Enter score: "))
+    return score
+
+# Prints a star (*) up to the value of the score
+def show_stars(score):
+    print("*" * int(score))
+
+main()
