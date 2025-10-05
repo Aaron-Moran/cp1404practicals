@@ -41,8 +41,10 @@ def is_valid_password(password):
             number_of_lower += 1
         elif character.isupper():
             number_of_upper += 1
+        elif character.isdigit():
+            number_of_digit += 1
 
-    if number_of_lower == 0 or number_of_upper == 0:
+    if number_of_lower == 0 or number_of_upper == 0 or number_of_digit == 0:
         return False
 
     return True
