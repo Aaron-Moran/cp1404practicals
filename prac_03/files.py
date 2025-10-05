@@ -19,6 +19,13 @@ in_file.close()
 print(f"Hi {read_name}!")
 
 # 3. Read only the first two numbers from numbers.txt, add and print
+
+# Creates the numbers.txt file with values
+NUMBERS_TO_WRITE = [17, 42, 400]
+with open(NUMBERS_FILENAME, "w") as out_file:
+    for value in NUMBERS_TO_WRITE:
+        print(value, file=out_file)
+
 with open(NUMBERS_FILENAME, "r") as in_file:
     first_number = int(in_file.readline())
     second_number = int(in_file.readline())
