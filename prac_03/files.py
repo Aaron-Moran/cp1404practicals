@@ -10,3 +10,9 @@ name = input("Enter your name: ")
 out_file = open(NAME_FILENAME, "w")
 print(name, file=out_file)
 out_file.close()
+
+# 2. Read the name from name.txt and print "Hi {name}!"
+in_file = open(NAME_FILENAME, "r")
+read_name = in_file.read().strip()
+in_file.close()
+print(f"Hi {read_name}!")
