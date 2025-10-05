@@ -39,7 +39,10 @@ def is_valid_password(password):
     for character in password:
         if character.islower():
             number_of_lower += 1
-    if number_of_lower == 0:
+        elif character.isupper():
+            number_of_upper += 1
+
+    if number_of_lower == 0 or number_of_upper == 0:
         return False
 
     return True
