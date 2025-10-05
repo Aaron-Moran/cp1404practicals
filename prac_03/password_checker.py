@@ -27,39 +27,31 @@ def main():
 
 def is_valid_password(password):
     """Determine if the provided password is valid."""
-    # Checks length of password
-    if len(password) < MIN_LENGTH or len(password) >MAX_LENGTH:
+
+    if len(password) < MIN_LENGTH or len(password) >MAX_LENGTH: # Checks length of password
         return False
 
-    # Checks if there is at least 1 lower case letter
     number_of_lower = 0
     number_of_upper = 0
     number_of_digit = 0
     number_of_special = 0
+
     for character in password:
-        if character.islower():
+        if character.islower(): # Checks if there is a lower case letter
             number_of_lower += 1
-        elif character.isupper():
+        elif character.isupper(): # Checks if there is an upper case letter
             number_of_upper += 1
-        elif character.isdigit():
+        elif character.isdigit(): # Checks if there is a number
             number_of_digit += 1
+        elif character in SPECIAL_CHARACTERS: # Checks if there is a special character from the list
+            number_of_special += 1
 
     if number_of_lower == 0 or number_of_upper == 0 or number_of_digit == 0:
         return False
 
+    if IS_SPECIAL_CHARACTER_REQUIRED and number_of_special == 0: # Checks if special characters are required
+        return False
+
     return True
-
-    for character in password:
-        # TODO: count each kind of character (use str methods like isdigit)
-        pass
-
-    # TODO: if any of the 'normal' counts are zero, return False
-
-    # TODO: if special characters are required, then check the count of those
-    # and return False if it's zero
-
-    # if we get here (without returning False), then the password must be valid
-    return True
-
 
 main()
