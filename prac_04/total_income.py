@@ -10,7 +10,7 @@ def main():
 
     # get the income for the number of specified months
     for month in range(1, months + 1):
-        income = float(input("Enter income for month " + str(month) + ": "))
+        income = float(input(f"Enter income for month {month}")) # Uses f-string instead of string concatenation
         incomes.append(income)
 
     # Prints the output from the list
