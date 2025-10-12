@@ -15,5 +15,17 @@ def main():
         print("Invalid input, enter 1 or more")
         quick_pick_count = int(input("How many quick picks? "))
 
+    for _ in range(quick_pick_count):
+        print(generate_quick_picks())
+
+def generate_quick_picks():
+    """Return one quick pick."""
+    numbers = []
+    while len(numbers) < NUMBER_PER_PICK:
+        value = random.randint(MIN_NUMBER, MAX_NUMBER)
+        numbers.append(value)
+    numbers.sort()
+    return numbers
+
 
 main()
