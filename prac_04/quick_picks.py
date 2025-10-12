@@ -16,7 +16,8 @@ def main():
         quick_pick_count = int(input("How many quick picks? "))
 
     for _ in range(quick_pick_count):
-        print(generate_quick_picks())
+        quick_pick = generate_quick_picks()
+        print(" ".join(f"{number:2}" for number in quick_pick))
 
 def generate_quick_picks():
     """Return one quick pick with not repeating number within the same list."""
