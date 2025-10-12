@@ -19,11 +19,12 @@ def main():
         print(generate_quick_picks())
 
 def generate_quick_picks():
-    """Return one quick pick."""
+    """Return one quick pick with not repeating number within the same list."""
     numbers = []
     while len(numbers) < NUMBER_PER_PICK:
         value = random.randint(MIN_NUMBER, MAX_NUMBER)
-        numbers.append(value)
+        if value not in numbers:
+            numbers.append(value)
     numbers.sort()
     return numbers
 
