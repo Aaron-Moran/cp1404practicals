@@ -8,7 +8,8 @@ FILENAME = "subject_data.txt"
 
 def main():
     data = load_data(FILENAME)
-    print(data)
+    print(data, "\n")
+    display_subjects(data)
 
 
 def load_data(filename=FILENAME):
@@ -21,6 +22,11 @@ def load_data(filename=FILENAME):
             parts[2] = int(parts[2])
             subjects.append(parts)
     return subjects
+
+def display_subjects(data):
+    """Display subject information as statements"""
+    for subject_code, lecturer_name, student_count in data:
+        print(f"{subject_code} is taught by {lecturer_name} and has {student_count:3d} students")
 
 
 main()
