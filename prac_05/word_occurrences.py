@@ -6,6 +6,7 @@ Actual: 26 minutes
 """
 
 def main():
+    """Count word occurrences from input, then print sorted and aligned results."""
     text = input("text: ")
     words = text.lower().split()
 
