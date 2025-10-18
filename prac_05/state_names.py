@@ -14,10 +14,10 @@ CODE_TO_NAME = {"QLD": "Queensland",
                 "SA": "South Australia"}
 print(CODE_TO_NAME)
 
-state_code = input("Enter short state: ")
+state_code = input("Enter short state: ").strip().upper()
 while state_code != "":
     if state_code in CODE_TO_NAME:
         print(state_code, "is", CODE_TO_NAME[state_code])
     else:
         print("Invalid short state")
-    state_code = input("Enter short state: ")
+    state_code = input("Enter short state: ").strip().upper()
