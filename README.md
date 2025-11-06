@@ -4,8 +4,8 @@
 
 This repository contains my weekly practical exercises for CP1404/CP5632 at James Cook University.
 
-**Author:** Aaron Moran\
-**Student ID:** 13490654
+Author: Aaron Moran\
+Student ID: 13490654
 ---
 ## Clean code lessons
 - Apply the Single Responsibility Principle and keep functions small and focused.
