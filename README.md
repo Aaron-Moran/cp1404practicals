@@ -1,7 +1,9 @@
 # CP1404 Practicals
 
 ## About
-This repository contains my weekly practical exercises for CP1404 at James Cook University.  
+
+This repository contains my weekly practical exercises for CP1404/CP5632 at James Cook University.
+
 **Author:** Aaron Moran\
 **Student ID:** 13490654
 ---
