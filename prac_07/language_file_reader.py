@@ -11,7 +11,12 @@ from programming_language import ProgrammingLanguage
 
 
 def main():
-    """Read file of programming language details, save as objects, display."""
+    """
+    Read file of programming language details, save as objects, display.
+
+    Expects CSV with header:
+    Language,Typing,Reflection,PointerArithmetic,Year
+    """
     languages = []
     # Open the file for reading
     in_file = open('languages.csv', 'r')
@@ -26,9 +31,10 @@ def main():
         # print(parts)  # debugging
         # Reflection is stored as a string (Yes/No) and we want a Boolean
         reflection = parts[2] == "Yes"
+        pointer_arithmetic = parts[3] == "Yes"
         # Construct a ProgrammingLanguage object using the elements
         # year should be an int
-        language = ProgrammingLanguage(parts[0], parts[1], reflection, int(parts[3]))
+        language = ProgrammingLanguage(parts[0], parts[1], reflection, pointer_arithmetic, int(parts[4]))
         # Add the language we've just constructed to the list
         languages.append(language)
     # Close the file as soon as we've finished reading it
