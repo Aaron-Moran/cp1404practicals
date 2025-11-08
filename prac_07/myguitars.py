@@ -9,11 +9,18 @@ FILENAME = "guitars.csv"
 
 
 def main():
-    """Load guitars, sort from oldest to newest, and display them."""
+    """Load guitars, sort and display, collect new entries, and save all to CSV."""
     guitars = load_guitars(FILENAME)
+
     guitars.sort()
     print("Guitars:")
     display_guitars(guitars)
+
+    print("\nAdd new guitars (blank name to finish):")
+    add_new_guitars(guitars)
+
+    save_guitars(FILENAME, guitars)
+    print(f"\n{len(guitars)} guitars saved to {FILENAME}")
 
 
 def load_guitars(filename: str) -> list[Guitar]:
@@ -33,7 +40,43 @@ def display_guitars(guitars: list[Guitar]) -> None:
     """Display guitars with numbering and vintage tag."""
     for i, guitar in enumerate(guitars, 1):
         vintage = " (vintage)" if guitar.is_vintage() else ""
-        print(f"{i}) {guitar}{vintage}")
+        print(f"Guitar {i}: {guitar.name:>25} ({guitar.year}), worth ${guitar.cost:10,.2f}{vintage}")
+
+
+def add_new_guitars(guitars: list[Guitar]) -> None:
+    """Prompt the user to enter new guitars and append to the list."""
+    name = input("Name: ").strip()
+    while name != "":
+        year = get_valid_int("Year: ")
+        cost = get_valid_float("Cost: $")
+        guitars.append(Guitar(name, year, cost))
+        print(f"{name} ({year}) : ${cost:,.2f} added.\n")
+        name = input("Name: ").strip()
+
+
+def save_guitars(filename: str, guitars: list[Guitar]) -> None:
+    """Write all guitars to CSV in 'Name,Year,Cost' format."""
+    with open(filename, "w", encoding="utf-8") as out_file:
+        for guitar in guitars:
+            print(f"{guitar.name},{guitar.year},{guitar.cost}", file=out_file)
+
+
+def get_valid_int(prompt: str) -> int:
+    """Get a valid integer from the user."""
+    while True:
+        try:
+            return int(input(prompt))
+        except ValueError:
+            print("Invalid input; enter a valid integer.")
+
+
+def get_valid_float(prompt: str) -> float:
+    """Get a valid floating-point number from the user."""
+    while True:
+        try:
+            return float(input(prompt))
+        except ValueError:
+            print("Invalid input; enter a valid number.")
 
 
 if __name__ == "__main__":
