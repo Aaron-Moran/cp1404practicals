@@ -2,14 +2,24 @@
 CP1404/CP5632 Practical - Project Management Program
 
 Estimated: 240 minutes
-Actual: 100+45+25
+Actual: 100+45+25+30
 """
 
-from datetime import datetime
+from datetime import datetime, date
 from project import Project
 
 DEFAULT_FILENAME = "projects.txt"
 DATE_FORMAT = "%d/%m/%Y"
+
+MENU = (
+    "- (L)oad projects\n"
+    "- (S)ave projects\n"
+    "- (D)isplay projects\n"
+    "- (F)ilter projects by date\n"
+    "- (A)dd new project\n"
+    "- (U)pdate project\n"
+    "- (Q)uit\n"
+)
 
 def main():
     """Load default data, then print a menu"""
@@ -17,32 +27,25 @@ def main():
     print("Welcome to Pythonic Project Management")
     print(f"Loaded {len(projects)} projects from {DEFAULT_FILENAME}")
 
-    MENU = (
-        "- (L)oad projects\n"
-        "- (S)ave projects\n"
-        "- (D)isplay projects\n"
-        "- (F)ilter projects by date\n"
-        "- (A)dd new project\n"
-        "- (U)pdate project\n"
-        "- (Q)uit\n"
-    )
     choice = input(MENU + ">>> ").lower()
     while choice != "q":
         if choice == "d":
             display_projects(projects)
         elif choice == "l":
-            projects = prompt_load_projects(projects)
+            projects = prompt_load_projects()
         elif choice == "s":
             prompt_save_projects(projects)
         elif choice == "f":
             filter_projects_by_date(projects)
+        elif choice == "a":
+            add_new_project(projects)
+        elif choice == "u":
+            update_project(projects)
         else:
             print("Invalid choice")
         choice = input(MENU + ">>> ").lower()
 
     prompt_save_on_quit(projects)
-
-    # TODO Add menu (A/U)
 
 
 def load_projects(filename: str) -> list[Project]:
@@ -79,18 +82,56 @@ def filter_projects_by_date(projects: list[Project]) -> None:
         print(p)
 
 
-def get_date(prompt: str) -> datetime.date:
+def add_new_project(projects: list[Project]) -> None:
+    """Prompt for fields and append a new Project to the list."""
+    print("Let's add a new project")
+    name = input("Name: ").strip()
+    start_date = get_date("Start date (dd/mm/yyyy): ")
+    priority = int(input("Priority: "))
+    estimate = float(input("Cost estimate: $"))
+    completion = int(input("Percent complete: "))
+    projects.append(Project(name, start_date, priority, estimate, completion))
+
+
+def update_project(projects: list[Project]) -> None:
+    """Choose a project, then modify completion % and/or priority (blank to keep)."""
+    # Show projects with indices (use current order)
+    for i, p in enumerate(projects):
+        print(f"{i} {p}")
+
+    index = int(input("Project choice: "))
+    project = projects[index]
+    print(project)
+
+    new_completion = get_optional_int("New Percentage: ")
+    if new_completion is not None:
+        project.completion = new_completion
+
+    new_priority = get_optional_int("New Priority: ")
+    if new_priority is not None:
+        project.priority = new_priority
+
+
+def get_date(prompt: str) -> date:
     """Prompt for a date string and return a date using DATE_FORMAT."""
     date_text = input(prompt)
     return datetime.strptime(date_text, DATE_FORMAT).date()
 
 
-def get_project_start_date(project: Project) -> datetime.date:
+def get_project_start_date(project: Project) -> date:
     """Return a project's start date (for sorting)."""
     return project.start_date
 
 
-def prompt_load_projects(current_projects: list[Project]) -> list[Project]:
+def get_optional_int(prompt: str) -> int | None:
+    """Return int from input; return None if the user presses Enter."""
+    text = input(prompt).strip()
+    if text == "":
+        return None
+    return int(text)
+
+
+def prompt_load_projects() -> list[Project]:
     """Prompt for a filename and load projects from it; return the new list."""
     filename = input("Load projects from: ")
     new_projects = load_projects(filename)
