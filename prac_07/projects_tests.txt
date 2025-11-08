@@ -1,0 +1,4 @@
+Name	Start Date	Priority	Cost Estimate	Completion Percentage
+A Small Task	01/01/2024	3	10.0	0
+A Big Task	15/06/2023	1	2000.0	50
+Finished Task	31/12/2022	2	100.0	100
