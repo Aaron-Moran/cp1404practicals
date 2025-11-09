@@ -2,7 +2,7 @@
 CP1404/CP5632 Practical - Project Management Program
 
 Estimated: 240 minutes
-Actual: 100+45+25+30
+Actual: 100+45+25+30+65 = 265 minutes
 """
 
 from datetime import datetime, date
@@ -22,7 +22,7 @@ MENU = (
 )
 
 def main():
-    """Load default data, then print a menu"""
+    """Load default data, then run the main menu loop."""
     projects = load_projects(DEFAULT_FILENAME)
     print("Welcome to Pythonic Project Management")
     print(f"Loaded {len(projects)} projects from {DEFAULT_FILENAME}")
@@ -48,8 +48,21 @@ def main():
     prompt_save_on_quit(projects)
 
 
+def display_projects(projects: list[Project]) -> None:
+    """Display incomplete and completed projects, each sorted by priority."""
+    incomplete = sorted([p for p in projects if not p.is_complete()])
+    complete = sorted([p for p in projects if p.is_complete()])
+
+    print("Incomplete projects:")
+    for p in incomplete:
+        print(f"  {p}")
+    print("Completed projects:")
+    for p in complete:
+        print(f"  {p}")
+
+
 def load_projects(filename: str) -> list[Project]:
-    """Load projects."""
+    """Load projects: Name, Start Date, Priority, Cost Estimate, Completion Percentage."""
     projects: list[Project] = []
     with open(filename, "r", encoding="utf-8-sig") as in_file:
         in_file.readline()
@@ -75,9 +88,9 @@ def save_projects(filename: str, projects: list[Project]) -> None:
 
 def filter_projects_by_date(projects: list[Project]) -> None:
     """Ask for a date and display projects that start after it, sorted by date."""
-    start_after = get_date("Show projects that start after date (dd/mm/yyyy): ")
+    start_after = get_valid_date("Show projects that start after date (dd/mm/yyyy): ", DATE_FORMAT)
     filtered = [p for p in projects if p.starts_after(start_after)]
-    filtered.sort(key=get_project_start_date)  # sort by date (ascending)
+    filtered.sort(key=get_project_start_date)
     for p in filtered:
         print(p)
 
@@ -86,49 +99,66 @@ def add_new_project(projects: list[Project]) -> None:
     """Prompt for fields and append a new Project to the list."""
     print("Let's add a new project")
     name = input("Name: ").strip()
-    start_date = get_date("Start date (dd/mm/yyyy): ")
-    priority = int(input("Priority: "))
-    estimate = float(input("Cost estimate: $"))
-    completion = int(input("Percent complete: "))
+    start_date = get_valid_date("Start date (dd/mm/yyyy): ", DATE_FORMAT)
+
+    priority = get_valid_int("Priority: ")
+    while priority is None or priority < 1:
+        if priority is None:
+            print("This field is required.")
+        else:
+            print("Invalid input; priority must be greater than 0.")
+        priority = get_valid_int("Priority: ")
+
+    estimate = get_valid_float("Cost estimate: $")
+    while estimate < 0.0:
+        print("Invalid input; estimate must be 0 or greater.")
+        estimate = get_valid_float("Cost estimate: $")
+
+    completion = get_valid_int("Percent complete: ")
+    while completion is None or completion < 0 or completion > 100:
+        if completion is None:
+            print("This field is required.")
+        else:
+            print("Invalid input; completion must be between 0 and 100.")
+        completion = get_valid_int("Percent complete: ")
+
     projects.append(Project(name, start_date, priority, estimate, completion))
 
 
 def update_project(projects: list[Project]) -> None:
-    """Choose a project, then modify completion % and/or priority (blank to keep)."""
-    # Show projects with indices (use current order)
+    """Choose a project, then modify completion % and/or priority (blank to keep current value)."""
     for i, p in enumerate(projects):
         print(f"{i} {p}")
 
-    index = int(input("Project choice: "))
+    max_index = len(projects) - 1
+    index = get_valid_int("Project choice: ")
+    while index is None or index < 0 or index > max_index:
+        if index is None:
+            print("This field is required.")
+        else:
+            print(f"Invalid input; enter an index between 0 and {max_index}.")
+        index = get_valid_int("Project choice: ")
+
     project = projects[index]
     print(project)
 
-    new_completion = get_optional_int("New Percentage: ")
-    if new_completion is not None:
-        project.completion = new_completion
+    while True:
+        value = get_valid_int("New Percentage: ")
+        if value is None:
+            break  # keep existing
+        if 0 <= value <= 100:
+            project.completion = value
+            break
+        print("Invalid input; enter a value between 0 and 100.")
 
-    new_priority = get_optional_int("New Priority: ")
-    if new_priority is not None:
-        project.priority = new_priority
-
-
-def get_date(prompt: str) -> date:
-    """Prompt for a date string and return a date using DATE_FORMAT."""
-    date_text = input(prompt)
-    return datetime.strptime(date_text, DATE_FORMAT).date()
-
-
-def get_project_start_date(project: Project) -> date:
-    """Return a project's start date (for sorting)."""
-    return project.start_date
-
-
-def get_optional_int(prompt: str) -> int | None:
-    """Return int from input; return None if the user presses Enter."""
-    text = input(prompt).strip()
-    if text == "":
-        return None
-    return int(text)
+    while True:
+        value = get_valid_int("New Priority: ")
+        if value is None:
+            break  # keep existing
+        if value >= 1:
+            project.priority = value
+            break
+        print("Invalid input; enter an integer greater than 0.")
 
 
 def prompt_load_projects() -> list[Project]:
@@ -155,18 +185,48 @@ def prompt_save_on_quit(projects: list[Project]) -> None:
     print("Thank you for using custom-built project management software.")
 
 
-def display_projects(projects: list[Project]) -> None:
-    """Display incomplete and completed projects, each sorted by priority."""
-    incomplete = sorted([p for p in projects if not p.is_complete()])
-    complete = sorted([p for p in projects if p.is_complete()])
+def get_date(prompt: str) -> date:
+    """Prompt for a date string and return a date using DATE_FORMAT."""
+    date_text = input(prompt)
+    return datetime.strptime(date_text, DATE_FORMAT).date()
 
-    print("Incomplete projects:")
-    for p in incomplete:
-        print(f"  {p}")
-    print("Completed projects:")
-    for p in complete:
-        print(f"  {p}")
 
+def get_project_start_date(project: Project) -> date:
+    """Return a project's start date (for sorting)."""
+    return project.start_date
+
+
+def get_valid_int(prompt: str) -> int | None:
+    """Prompt until a valid integer or blank is entered."""
+    while True:
+        text = input(prompt).strip()
+        if text == "":
+            return None
+        try:
+            return int(text)
+        except ValueError:
+            print("Invalid input; enter a valid integer.")
+
+
+def get_valid_float(prompt: str) -> float:
+    """Prompt until a valid floating-point number is entered."""
+    while True:
+        text = input(prompt).strip()
+        try:
+            return float(text)
+        except ValueError:
+            print("Invalid input; enter a valid number.")
+
+
+def get_valid_date(prompt: str, fmt: str) -> date:
+    """Prompt until a date parses with the given format."""
+    while True:
+        text = input(prompt).strip()
+        try:
+            return datetime.strptime(text, fmt).date()
+        except ValueError:
+            example = fmt.lower().replace("%d", "dd").replace("%m", "mm").replace("%Y", "yyyy")
+            print(f"Invalid date; use format {example}.")
 
 if __name__ == "__main__":
     main()
