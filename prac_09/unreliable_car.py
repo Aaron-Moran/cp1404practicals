@@ -11,7 +11,13 @@ class UnreliableCar(Car):
     """Specialised Car that sometimes does not drive as intended."""
 
     def __init__(self, name, fuel, reliability):
-        """Initialise an UnreliableCar instance."""
+        """
+        Initialise an UnreliableCar instance.
+
+        name: str, name of the car
+        fuel: int, amount of fuel
+        reliability: float, percentage chance (0-100) that the car will drive
+        """
         super().__init__(name, fuel)
         self.reliability = reliability
 

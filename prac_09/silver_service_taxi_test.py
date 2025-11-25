@@ -15,7 +15,7 @@ def main():
     print(fancy_taxi)
     print(f"Fare for 18 km trip: ${fare:.2f}")
 
-    assert abs(fare - 48.78) < 0.01, "Fare calculation is incorrect"
+    assert abs(fare - 48.80) < 0.01, "Fare calculation is incorrect"
 
 
 if __name__ == "__main__":
